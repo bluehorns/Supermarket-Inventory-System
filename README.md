@@ -1,3 +1,3 @@
 # Supermarket-Inventory-System
 
-Work in progress for an inventory system
+Work in progress for an inventory system made using java
