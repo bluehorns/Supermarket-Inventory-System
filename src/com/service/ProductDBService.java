@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -15,7 +14,7 @@ import com.model.Product;
 
 public class ProductDBService implements DatabaseService<Product> {
 	private Connection con;
-	private static List<Product> plist = new ArrayList<>();
+	private List<Product> plist = new ArrayList<>();
 	
 	@Override
 	public void addRecord(Product record) {
@@ -68,9 +67,32 @@ public class ProductDBService implements DatabaseService<Product> {
 	}
 	
 	@Override
-	public void updateRecord(Product type) {
-		// TODO Auto-generated method stub
+	public void updateRecord(Product record) {
 		
+		SwingWorker<Void, Void> worker  = new SwingWorker<>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				connectToDB();
+				String sql = "UPDATE products SET product_name = ? , product_price = ?, product_quantity = ?, "
+						+ "product_company = ? WHERE product_id = ?";
+				PreparedStatement stm = con.prepareStatement(sql);
+				stm.setString(1, record.getName());
+				stm.setInt(2, record.getPrice());
+				stm.setInt(3, record.getQuantity());
+				stm.setString(4, record.getCompany());
+				stm.setInt(5, record.getId());
+				stm.executeUpdate();
+				closeDB();
+				return null;
+			}
+			
+			@Override
+			protected void done() {
+				
+				super.done();
+			}
+		};
+		worker.execute();
 	}
 	
 	@Override

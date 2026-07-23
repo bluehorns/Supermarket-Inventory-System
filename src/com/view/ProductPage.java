@@ -3,8 +3,12 @@ package com.view;
 	
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
 
 import com.model.Product;
 import com.service.DatabaseService;
@@ -26,32 +30,24 @@ import javax.swing.JLabel;
 public class ProductPage  {
 	private JPanel productPagePane;
 	
-	private JPanel formPanel;
-	private JButton addButton;
-	private JButton updateButton;
 	private JButton deleteButton;
+	private JButton refreshButton;
 	
-	private JPanel addPanel;
-	private JLabel productNameLabel;
-	private JTextField productNameTextField;
-	private JLabel productPriceLabel;
-	private JTextField productPriceTextField;
-	private JLabel productQuantityLabel; //add plus/minus button
-	private JTextField productQuantityTextField;
-	private JLabel productCompanyLabel;
-	private JTextField productCompanyTextField;
+	private ProductFormPanel formPanel;
 	
+	private JPanel tableHeaderPanel;
 	private JScrollPane tableScrollPane;
-	private Table productTable = new Table();
+	private ProductTable productTable = new ProductTable();
 	private GridBagConstraints gbcProductPage = new GridBagConstraints();
 	
 	
 	public ProductPage() {
-		formAddPanel();
 		setPanelLayout();
-		//setFormPanel();
-		formAddButtonEvent();
+		addButtonEvent();
+		updateButtonEvent();
 		setTableScrollPane();
+		setUptableHeaderPanel();
+		rowListener();
 	}
 	
 	private void setPanelLayout() {
@@ -59,81 +55,42 @@ public class ProductPage  {
 		productPagePane.setLayout(new GridBagLayout());
 		gbcProductPage = new GridBagConstraints();
 		
-		
-		formPanel = new JPanel();
-		formPanel.setBackground(Color.yellow);
+		formPanel = new ProductFormPanel();
 		gbcProductPage.fill = GridBagConstraints.BOTH;
 		gbcProductPage.gridx = 0;
 		gbcProductPage.gridy = 0;
-		gbcProductPage.weightx = 0.2;
+		gbcProductPage.weightx = 0.1;
 		gbcProductPage.weighty = 1;
-		productPagePane.add(addPanel,gbcProductPage);
+		gbcProductPage.gridheight = 2;
+		productPagePane.add(formPanel.getPanel(),gbcProductPage);
+		
+		
+		tableHeaderPanel = new JPanel();
+		gbcProductPage.gridx = 1;
+		gbcProductPage.gridy = 0;
+		gbcProductPage.gridheight = 1;
+		gbcProductPage.weightx = 0.8;
+		gbcProductPage.weighty = 0.1;
+		productPagePane.add(tableHeaderPanel,gbcProductPage);
+		tableHeaderPanel.setBackground(Color.yellow);
 		
 		tableScrollPane = new JScrollPane();
 		gbcProductPage.gridx = 1;
+		gbcProductPage.gridy = 1;
 		gbcProductPage.weightx = 0.8;
+		gbcProductPage.weighty = 0.9;
 		productPagePane.add(tableScrollPane,gbcProductPage);
 			
 	}	
 	
-	private void setFormPanel() {
-		formPanel.setLayout(new BoxLayout(formPanel,BoxLayout.Y_AXIS));
+	private void setUptableHeaderPanel() {
+		refreshButton = new JButton("Refresh");
+		tableHeaderPanel.add(refreshButton);
+		refreshButtonEvent();
+		
 		deleteButton = new JButton("Delete");
-		formPanel.add(deleteButton);
-		updateButton = new JButton("Update");
-		formPanel.add(updateButton);
-		
-	}
-	
-	private void formAddPanel() {
-		addPanel = new JPanel();
-		addPanel.setLayout(new GridBagLayout());
-		
-		productNameLabel = new JLabel("Name:");
-		gbcProductPage.gridx = 0;
-		gbcProductPage.gridy = 0;
-		addPanel.add(productNameLabel,gbcProductPage);
-		
-		productNameTextField = new JTextField(30);
-		gbcProductPage.gridx = 1;
-		gbcProductPage.gridy = 0;
-		addPanel.add(productNameTextField,gbcProductPage);
-		
-		productPriceLabel = new JLabel("Price:");
-		gbcProductPage.gridx = 0;
-		gbcProductPage.gridy = 1;
-		addPanel.add(productPriceLabel,gbcProductPage);
-		
-		productPriceTextField = new JTextField(30);
-		gbcProductPage.gridx = 1;
-		gbcProductPage.gridy = 1;
-		addPanel.add(productPriceTextField,gbcProductPage);
-		
-		productQuantityLabel = new JLabel("Quantity:");
-		gbcProductPage.gridx = 0;
-		gbcProductPage.gridy = 2;
-		addPanel.add(productQuantityLabel,gbcProductPage);
-		
-		productQuantityTextField = new JTextField(30);
-		gbcProductPage.gridx = 1;
-		gbcProductPage.gridy = 2;
-		addPanel.add(productQuantityTextField,gbcProductPage);
-		
-		
-		productCompanyLabel = new JLabel("Company:");
-		gbcProductPage.gridx = 0;
-		gbcProductPage.gridy = 3;
-		addPanel.add(productCompanyLabel,gbcProductPage);
-		
-		productCompanyTextField = new JTextField(30);
-		gbcProductPage.gridx = 1;
-		gbcProductPage.gridy = 3;
-		addPanel.add(productCompanyTextField,gbcProductPage);
-		
-		addButton = new JButton("Add");
-		gbcProductPage.gridx = 1;
-		gbcProductPage.gridy = 4;
-		addPanel.add(addButton,gbcProductPage);
+		tableHeaderPanel.add(deleteButton);
+		deleteButtonEvent();
 	}
 	
 	
@@ -141,46 +98,88 @@ public class ProductPage  {
 		return productPagePane;
 	}
 	
-	public void formAddButtonEvent() {
+	
+	private void refreshButtonEvent() {
+		refreshButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setTableView();
+			}
+		});
+	}
+	
+	private void addButtonEvent() {
+		JButton addButton = formPanel.getAddButton();
 		addButton.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DatabaseService pdi = new ProductDBService();	
-				Product formProduct = readFormEntry();
+				DatabaseService<Product> pdi = new ProductDBService();	
+				Product formProduct = formPanel.readFormEntry();
 				pdi.addRecord(formProduct);
 
 			}
 		});
 	}
 	
-	public void formDeleteButtonEvent() {
+	private void deleteButtonEvent() {
 		deleteButton.addActionListener(new ActionListener() {
+			List<Product> productList = new ArrayList<>();
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				DatabaseService<Product> pdi = new ProductDBService();
+				productList = productTable.getCheckBoxList();
+				for(Product prod:productList) {
+					pdi.deleteRecord(prod);
+				}
 			}
 		});
 	}
 	
-	
-	public Product readFormEntry() {
-		Product formProduct = new Product();
-		formProduct.setName(productNameTextField.getText());
-		formProduct.setPrice(Integer.parseInt(productPriceTextField.getText()));
-		formProduct.setQuantity(Integer.parseInt(productQuantityTextField.getText()));
-		formProduct.setCompany(productCompanyTextField.getText());
-		return formProduct;
+	private void updateButtonEvent() {
+		JButton updateButton = formPanel.getUpdateButton();
+		updateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DatabaseService<Product> pdi = new ProductDBService();
+				Product formProduct = formPanel.readFormEntry();
+				System.out.println(formProduct);
+				pdi.updateRecord(formProduct);
+			}
+		});
 	}
 	
-	public void setTableScrollPane() {
+	private void rowListener() {
+		JTable table = productTable.getTable();
+		TableModel tableModel = table.getModel();
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if(table.getSelectionModel().isSelectionEmpty()) {
+					return;
+				}
+				//maybe add a way to drag select multiple rows
+				if(!e.getValueIsAdjusting()) {
+					int viewRow =  table.getSelectedRow();
+					int modelRow = table.convertRowIndexToModel(viewRow);
+					Boolean checkbox = (Boolean) tableModel.getValueAt(modelRow, 0);
+					tableModel.setValueAt(!checkbox, modelRow, 0);
+					Product tempProduct = productTable.convertRowtoProduct(modelRow);
+					formPanel.fillFormWithSelection(tempProduct);
+					table.getSelectionModel().clearSelection();
+				}
+			}
+		});
+	
+	}
+	
+	private void setTableScrollPane() {
 		productTable.intitializeTable();
 		tableScrollPane.setViewportView(productTable.getTable());
-		setTableView(productTable);
+		setTableView();
 	}
 	
-	public void setTableView(Table productTable) {
+	private void setTableView() {
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
