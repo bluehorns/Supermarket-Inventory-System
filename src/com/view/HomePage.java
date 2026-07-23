@@ -32,7 +32,6 @@ public class HomePage {
 	JPanel salesPageCard;
 	
 	public HomePage() {
-		
 		initialiseFrame();
 	}
 	
