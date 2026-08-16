@@ -4,7 +4,6 @@ package com.view;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -22,9 +21,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 	
 public class ProductPage  {
@@ -37,7 +34,7 @@ public class ProductPage  {
 	
 	private JPanel tableHeaderPanel;
 	private JScrollPane tableScrollPane;
-	private ProductTable productTable = new ProductTable();
+	private ProductTable productTable;
 	private GridBagConstraints gbcProductPage = new GridBagConstraints();
 	
 	
@@ -103,7 +100,7 @@ public class ProductPage  {
 		refreshButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				setTableView();
+				productTable.setTableData();
 			}
 		});
 	}
@@ -116,10 +113,18 @@ public class ProductPage  {
 			public void actionPerformed(ActionEvent e) {
 				DatabaseService<Product> pdi = new ProductDBService();	
 				Product formProduct = formPanel.readFormEntry();
-				pdi.addRecord(formProduct);
+				SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						pdi.addRecord(formProduct);
+						return null;
+					}
+				};
+				worker.execute();
 
 			}
 		});
+	
 	}
 	
 	private void deleteButtonEvent() {
@@ -127,11 +132,18 @@ public class ProductPage  {
 			List<Product> productList = new ArrayList<>();
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DatabaseService<Product> pdi = new ProductDBService();
-				productList = productTable.getCheckBoxList();
-				for(Product prod:productList) {
-					pdi.deleteRecord(prod);
-				}
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						DatabaseService<Product> pdi = new ProductDBService();
+						productList = productTable.getCheckBoxList();
+						for(Product prod:productList) {
+							pdi.deleteRecord(prod);
+						}
+						return null;
+					}
+				};	
+				worker.execute();	
 			}
 		});
 	}
@@ -141,10 +153,18 @@ public class ProductPage  {
 		updateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DatabaseService<Product> pdi = new ProductDBService();
-				Product formProduct = formPanel.readFormEntry();
-				System.out.println(formProduct);
-				pdi.updateRecord(formProduct);
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						DatabaseService<Product> pdi = new ProductDBService();
+						Product formProduct = formPanel.readFormEntry();
+						pdi.updateRecord(formProduct);
+						return null;
+					}
+					
+					
+				};
+				worker.execute();	
 			}
 		});
 	}
@@ -162,8 +182,8 @@ public class ProductPage  {
 				if(!e.getValueIsAdjusting()) {
 					int viewRow =  table.getSelectedRow();
 					int modelRow = table.convertRowIndexToModel(viewRow);
-					Boolean checkbox = (Boolean) tableModel.getValueAt(modelRow, 0);
-					tableModel.setValueAt(!checkbox, modelRow, 0);
+					Boolean checkbox = (Boolean) tableModel.getValueAt(modelRow, 5);
+					tableModel.setValueAt(!checkbox, modelRow, 5);
 					Product tempProduct = productTable.convertRowtoProduct(modelRow);
 					formPanel.fillFormWithSelection(tempProduct);
 					table.getSelectionModel().clearSelection();
@@ -174,20 +194,8 @@ public class ProductPage  {
 	}
 	
 	private void setTableScrollPane() {
-		productTable.intitializeTable();
+		productTable = new ProductTable();
 		tableScrollPane.setViewportView(productTable.getTable());
-		setTableView();
 	}
 	
-	private void setTableView() {
-		SwingWorker<Void, Void> worker = new SwingWorker<>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				productTable.setTableData();
-				return null;
-			}
-		};
-		
-		worker.execute();
-	}
 }

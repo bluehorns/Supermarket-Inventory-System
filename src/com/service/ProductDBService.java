@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.SwingWorker;
+
 
 import com.model.Product;
 
@@ -18,81 +18,61 @@ public class ProductDBService implements DatabaseService<Product> {
 	
 	@Override
 	public void addRecord(Product record) {
-		SwingWorker<Void,Void> worker = new SwingWorker<>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				connectToDB();
-				String sql = "INSERT INTO products(product_name, product_price, product_quantity, product_company)"
-						+ "VALUES(?,?,?,?)";
-				PreparedStatement stm = con.prepareStatement(sql);
-				stm.setString(1, record.getName());
-				stm.setInt(2, record.getPrice());
-				stm.setInt(3, record.getQuantity());
-				stm.setString(4, record.getCompany());
-				stm.executeUpdate();
-				closeDB();
-				return null;
-			}
-			@Override
-			protected void done() {
-				System.out.println("Added successfully");
-				super.done();
-			}
-		};
-		worker.execute();
+		connectToDB();
+		String sql = "INSERT INTO products(product_name, product_price, product_quantity, product_company)"
+				+ "VALUES(?,?,?,?)";
+		PreparedStatement stm;
+		try {
+			stm = con.prepareStatement(sql);
+			stm.setString(1, record.getName());
+			stm.setInt(2, record.getPrice());
+			stm.setInt(3, record.getQuantity());
+			stm.setString(4, record.getCompany());
+			stm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		closeDB();
+			
 	}
 	
 	@Override
 	public void deleteRecord(Product record) {
-		SwingWorker<Void,Void> worker = new SwingWorker<>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				connectToDB();
-				String sql = "UPDATE products SET is_deleted = 1 WHERE product_id = ? ";
-				PreparedStatement stm = con.prepareStatement(sql);
-				stm.setInt(1, record.getId());
-				stm.executeUpdate();
-				closeDB();
-				return null;
-			}
-			
-			@Override
-			protected void done() {
-				System.out.println("Deleted " + record.getName() +"");
-				super.done();
-			}
-		};
-		worker.execute();
+		connectToDB();
+		String sql = "UPDATE products SET is_deleted = 1 WHERE product_id = ? ";
+		PreparedStatement stm;
+		try {
+			stm = con.prepareStatement(sql);
+			stm.setInt(1, record.getId());
+			stm.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		closeDB();
 	}
 	
 	@Override
 	public void updateRecord(Product record) {
 		
-		SwingWorker<Void, Void> worker  = new SwingWorker<>() {
-			@Override
-			protected Void doInBackground() throws Exception {
-				connectToDB();
-				String sql = "UPDATE products SET product_name = ? , product_price = ?, product_quantity = ?, "
-						+ "product_company = ? WHERE product_id = ?";
-				PreparedStatement stm = con.prepareStatement(sql);
-				stm.setString(1, record.getName());
-				stm.setInt(2, record.getPrice());
-				stm.setInt(3, record.getQuantity());
-				stm.setString(4, record.getCompany());
-				stm.setInt(5, record.getId());
-				stm.executeUpdate();
-				closeDB();
-				return null;
-			}
-			
-			@Override
-			protected void done() {
-				
-				super.done();
-			}
-		};
-		worker.execute();
+		connectToDB();
+		String sql = "UPDATE products SET product_name = ? , product_price = ?, product_quantity = ?, "
+				+ "product_company = ? WHERE product_id = ?";
+		PreparedStatement stm;
+		try {
+			stm = con.prepareStatement(sql);
+			stm.setString(1, record.getName());
+			stm.setInt(2, record.getPrice());
+			stm.setInt(3, record.getQuantity());
+			stm.setString(4, record.getCompany());
+			stm.setInt(5, record.getId());
+			stm.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeDB();	
 	}
 	
 	@Override

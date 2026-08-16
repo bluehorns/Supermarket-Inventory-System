@@ -2,10 +2,6 @@ package com.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,12 +9,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.model.Product;
-import com.service.DatabaseService;
-import com.service.ProductDBService;
+
 
 public class ProductFormPanel {
 	private JPanel productFormPanel;
-	private JPanel formPanel;
 	private JButton addButton;
 	private JButton updateButton;
 	
@@ -109,7 +103,9 @@ public class ProductFormPanel {
 	
 	public Product readFormEntry() {
 		Product formProduct = new Product();
-		formProduct.setId(Integer.parseInt(productIdTextField.getText()));
+		if(!productIdTextField.getText().equals("")) {
+			formProduct.setId(Integer.parseInt(productIdTextField.getText()));
+		}
 		formProduct.setName(productNameTextField.getText());
 		formProduct.setPrice(Integer.parseInt(productPriceTextField.getText()));
 		formProduct.setQuantity(Integer.parseInt(productQuantityTextField.getText()));
@@ -123,7 +119,6 @@ public class ProductFormPanel {
 		productPriceTextField.setText(String.valueOf(selectedProduct.getPrice()));
 		productQuantityTextField.setText(String.valueOf(selectedProduct.getQuantity()));
 		productCompanyTextField.setText(selectedProduct.getCompany());
-		
 	}
 	
 	public JPanel getPanel() {
