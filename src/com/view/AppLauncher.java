@@ -1,78 +1,71 @@
 package com.view;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
+
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+	
 
 public class AppLauncher {
-	JFrame appLauncherFrame;
-	JPanel appLauncherPanel;
-	JPanel landingPanel;
-	JButton loginButton;
-	JButton registerButton;
-	
-	CardLayout appLauncherCardLayout;
+	private JFrame appLauncherFrame;
+	private JPanel appLauncherPanel;
+	private JPanel launcherBG;
+//	private JPanel landingPanel;
+//	private JButton loginButton;
+//	private JButton registerButton;
+//	private LoginPage loginPage;
+//	private RegisterPage registerPage;
+	private GridBagLayout appLauncherGridBagLayout;
 	
 	public AppLauncher() {
-		createAndShowGui();
-		addCards();
+		createGui();
+		setUpPanel();
+		showGui();
 	}
 	
-	private void createAndShowGui() {
+	private void createGui() {
 		appLauncherFrame = new JFrame();
 		appLauncherPanel = new JPanel();
 		
-		appLauncherCardLayout = new CardLayout();
-		appLauncherPanel.setLayout(appLauncherCardLayout);
-		
-		appLauncherPanel.setPreferredSize(new Dimension(600,450));
-		appLauncherFrame.add(appLauncherPanel,BorderLayout.CENTER);
+		appLauncherGridBagLayout = new GridBagLayout();
+		appLauncherPanel.setLayout(appLauncherGridBagLayout);
+		appLauncherFrame.add(appLauncherPanel);
+		appLauncherFrame.setPreferredSize(new Dimension(900,450));
 		appLauncherFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		appLauncherFrame.setVisible(true);
+	}
+	
+	private void showGui() {
 		appLauncherFrame.pack();
 		appLauncherFrame.setLocationRelativeTo(null);
-		
+		appLauncherFrame.setVisible(true);
 	}
 	
-	private void addCards() {
-		setUpLandingPanel();
-		appLauncherPanel.add(landingPanel,"landing");
+	public void setUpPanel() {
+		appLauncherPanel.setBackground(Color.green);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 0.8;
+		gbc.weighty = 1;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		launcherBG = new JPanel();
+		launcherBG.setOpaque(false);
+		appLauncherPanel.add(launcherBG,gbc);
 		
-		LoginPage loginPage = new LoginPage();
-		appLauncherPanel.add(loginPage.getLoginPage(),"login");
-		loginPage.setBackButtonEvent((e) -> appLauncherCardLayout.show(appLauncherPanel, "landing"));
 		
-		RegisterPage registerPage = new RegisterPage();
-		appLauncherPanel.add(registerPage.getRegisterPage(),"register");
-		registerPage.setBackButton(e-> appLauncherCardLayout.show(appLauncherPanel,"landing"));
-	}
-	
-	public void setUpLandingPanel() {
-		landingPanel = new JPanel();
-		//landingPanel.setLayout(new BorderLayout());
-		loginButton = new JButton("Login");
-		landingPanel.add(loginButton);
-		loginButton.addActionListener(e -> appLauncherCardLayout.show(appLauncherPanel, "login"));
-		
-		registerButton = new JButton("Register");
-		landingPanel.add(registerButton);
-		registerButton.addActionListener(e -> appLauncherCardLayout.show(appLauncherPanel, "register"));
+		gbc.weightx = 0.2;
+		gbc.weighty = 1;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		LoginPage login = new LoginPage();
+		appLauncherPanel.add(login.getLoginPage(),gbc);
 		
 	}
-	
-	public void setUpBackButton() {
-		
-	}
-
 	
 
 }

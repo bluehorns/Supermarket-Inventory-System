@@ -117,7 +117,7 @@ public class BillPage {
 					return;
 				}
 				if(!e.getValueIsAdjusting()) {
-					int viewRow =  table.getSelectedRow();
+					int viewRow = table.getSelectedRow();
 					int modelRow = table.convertRowIndexToModel(viewRow);
 					Product tempProduct = productTable.convertRowtoProduct(modelRow);
 					productPanel.setProductPanel(tempProduct);

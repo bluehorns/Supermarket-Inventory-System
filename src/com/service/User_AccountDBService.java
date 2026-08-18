@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import com.model.User_Account;
@@ -13,7 +14,7 @@ public class User_AccountDBService implements DatabaseService<User_Account> {
 	private Connection con;
 	
 	@Override
-	public void addRecord(User_Account record) {
+	public void addRecord(User_Account record)  {
 		connectToDB();
 		String sql = "Insert into user_account(user_name,user_id,password_hash,password_salt) values(?,?,?,?)";
 		User_Account tempAccount = new User_Account();
@@ -28,7 +29,7 @@ public class User_AccountDBService implements DatabaseService<User_Account> {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
 		closeDB();
 	}
 	

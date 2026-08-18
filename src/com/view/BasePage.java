@@ -40,9 +40,9 @@ public class BasePage {
 		//HomePageFrame.setUndecorated(true);  //set undecorated before set visible or error comes
 		BasePageFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		BasePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		BasePageFrame.setVisible(true);
 		BasePageFrame.setLayout(new GridBagLayout());
 		intialisePane();
+		BasePageFrame.setVisible(true);
 		
 	}
 	public void intialisePane() {
