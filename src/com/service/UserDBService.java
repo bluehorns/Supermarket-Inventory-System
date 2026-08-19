@@ -52,6 +52,25 @@ public class UserDBService implements DatabaseService<User_Info> {
 		return null;
 	}
 	
+	public User_Info fetchRecord(int userId) {
+		connectToDB();
+		String sql = "Select * from user_info where user_id = ?";
+		User_Info userInfo = new User_Info();
+		try {
+			PreparedStatement stm = con.prepareStatement(sql);
+			stm.setInt(1, userId);
+			ResultSet rs = stm.executeQuery();
+			rs.next();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		closeDB();
+		return userInfo;
+		
+	}
+	
 	@Override
 	public void connectToDB() {
 		try {

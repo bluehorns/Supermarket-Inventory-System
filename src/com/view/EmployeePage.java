@@ -1,14 +1,15 @@
 package com.view;
 
-import java.awt.GridBagLayout;
+import java.awt.GridBagLayout;	
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+	
 public class EmployeePage {
-	JPanel employeePagePanel;
-	JScrollPane employeePanelScrollPane;
-	EmployeeTable employeeTable;
+	private JPanel employeePagePanel;
+	private JScrollPane employeePanelScrollPane;
+	private EmployeeTable employeeTable;
 	public EmployeePage() {
 		intializePage();
 	}
@@ -23,6 +24,9 @@ public class EmployeePage {
 		employeeTable = new EmployeeTable();
 		employeePanelScrollPane.setViewportView(employeeTable.getTable());
 	}
+	
+	
+	
 	
 	public JPanel getPage() {
 		return employeePagePanel;

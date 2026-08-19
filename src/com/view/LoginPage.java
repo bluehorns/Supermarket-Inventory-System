@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import com.model.User_Info;
 import com.service.LoginValidation;
 
 
@@ -33,6 +34,7 @@ public class LoginPage {
 	private JButton loginButton;
 	private JButton registerButton;
 	private int userId;
+	private User_Info userInfo;
 	private RegisterPage registerPage;
 	private JDialog registerPageDialog;
 	
@@ -116,7 +118,9 @@ public class LoginPage {
 					@Override
 					protected void done() {
 						if(loginCheck) {
-							BasePage page = new BasePage(userId);
+							//UserDBService dbService = new UserDBService();
+							//userInfo = dbService.
+							BasePage page = new BasePage(usernameTextField.getText());
 							SwingUtilities.getWindowAncestor(loginButton).dispose();
 						}
 						super.done();

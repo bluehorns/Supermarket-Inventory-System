@@ -4,7 +4,8 @@ public class Employee {
 	private int employeeId;
 	private String employeeName;
 	private String employeePost;
-	private String userID;
+	private int userID;
+	
 	public int getEmployeeId() {
 		return employeeId;
 	}
@@ -23,10 +24,10 @@ public class Employee {
 	public void setEmployeePost(String employeePost) {
 		this.employeePost = employeePost;
 	}
-	public String getUserID() {
+	public int getUserID() {
 		return userID;
 	}
-	public void setUserID(String userID) {
+	public void setUserID(int userID) {
 		this.userID = userID;
 	} 
 }
