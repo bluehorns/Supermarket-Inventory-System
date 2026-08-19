@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.model.User_Info;
+
 public class BasePage {
 	JFrame BasePageFrame;
 	GridBagConstraints gbc;
@@ -30,8 +32,10 @@ public class BasePage {
 	JPanel productPageCard;
 	JPanel transactionPageCard;
 	JPanel salesPageCard;
+	private String username;
 	
-	public BasePage(int userId) {
+	public BasePage(String username) {
+		this.username = username;
 		initialiseFrame();
 	}
 	
@@ -136,9 +140,9 @@ public class BasePage {
 	
 	
 	 public void addCardsToPanel() {
-		HomePage homePage = new HomePage();
+		HomePage homePage = new HomePage(username);
 		homePageCard = homePage.getPage();
-
+		
 		
 		BillPage billPage = new BillPage();
 		billPageCard = billPage.getPage();
@@ -161,8 +165,6 @@ public class BasePage {
 		cardPanel.add(productPageCard,"product");
 		cardPanel.add(salesPageCard,"sales");
 	}
-	 
-	 
 	 
 	 
 }
