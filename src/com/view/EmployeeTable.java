@@ -1,6 +1,7 @@
 package com.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -15,17 +16,34 @@ public class EmployeeTable {
 	private JTable employeeTable;
 	private DefaultTableModel tableModel;
 	private List<Employee> employeeList = new ArrayList<>();
+	private HashMap<String,Object> employeeTableMap = new HashMap<>();
 	public EmployeeTable() {
 		intializeTable();
 		fetchTableData();
 	}
 	
+	private void setHashMap() {
+		employeeTableMap.put("S.N", null);
+		employeeTableMap.put("Employee ID", employeeList);
+	}
+	
+	public EmployeeTable(String[] columns) {
+		employeeTable = new JTable();
+		tableModel = new DefaultTableModel(new Object[][] {},columns);
+		employeeTable.setModel(tableModel);
+	}
+	
 	private void intializeTable() {
 		employeeTable = new JTable();
-		tableModel = new DefaultTableModel(new Object[][] {}, new String[] {"Employee ID","Name","Post"}) {
+		tableModel = new DefaultTableModel(new Object[][] {}, new String[] {"S.N","Employee ID","First Name",
+				"Last Name","Post"}) {
 			
 		};
 		employeeTable.setModel(tableModel);
+	}
+	
+	private void createAndSetTableModel() {
+		
 	}
 	
 	private void fetchTableData() {
@@ -45,10 +63,15 @@ public class EmployeeTable {
 		};
 		worker.execute();
 	}
+	
 	private void setTableData() {
+		int i = 1;
 		for(Employee employee:employeeList) {
-			Object[] newRow = {employee.getEmployeeId(),employee.getEmployeeName(),employee.getEmployeePost()};
+			int columnCount = tableModel.getColumnCount();
+			Object[] newRow = {i,employee.getEmployeeId(),employee.getEmployeeFirstName(),
+					employee.getEmployeeLastName(),employee.getEmployeePost()};
 			tableModel.addRow(newRow);
+			i++;
 		}
 	}
 	public JTable getTable() {

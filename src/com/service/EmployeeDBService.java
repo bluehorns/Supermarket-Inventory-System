@@ -17,13 +17,15 @@ public class EmployeeDBService implements  DatabaseService<Employee> {
 	@Override
 	public void addRecord(Employee record) {
 		connectToDB();
-		String sql = "Insert into employees(employee_name,employee_post,user_id) VALUES(?,?,?)";
+		String sql = "Insert into employees(employee_firstname,employee_lastname,employee_post,user_id) "
+				+ "VALUES(?,?,?,?)";
 		
 		try {
 			PreparedStatement stm = con.prepareStatement(sql);
-			stm.setString(1, record.getEmployeeName());
-			stm.setString(2, record.getEmployeePost());
-			stm.setInt(3, record.getUserID());
+			stm.setString(1, record.getEmployeeFirstName());
+			stm.setString(2, record.getEmployeeLastName());
+			stm.setString(3, record.getEmployeePost());
+			stm.setInt(4, record.getUserID());
 			stm.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -55,7 +57,7 @@ public class EmployeeDBService implements  DatabaseService<Employee> {
 		while(rs.next()) {
 			Employee employee = new Employee();
 			employee.setEmployeeId(rs.getInt("employee_id"));
-			employee.setEmployeeName(rs.getString("employee_name"));
+			employee.setEmployeeFirstName(rs.getString("employee_firstname"));
 			employee.setEmployeePost(rs.getString("employee_post"));
 			employee.setUserID(rs.getInt("user_id"));
 			employeeList.add(employee);
