@@ -1,5 +1,6 @@
 package com.service;
 
+import com.model.Employee;
 import com.model.User_Account;
 import com.model.User_Info;
 
@@ -30,4 +31,6 @@ public class Registration {
 		account.setPasswordHash(encrypt.passwordHashing(password, salt));
 		accountDB.addRecord(account);
 	}
+	
+	
 }

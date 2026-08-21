@@ -2,7 +2,8 @@ package com.model;
 
 public class Employee {
 	private int employeeId;
-	private String employeeName;
+	private String employeeFirstName;
+	private String employeeLastName;
 	private String employeePost;
 	private int userID;
 	
@@ -12,11 +13,17 @@ public class Employee {
 	public void setEmployeeId(int employeeId) {
 		this.employeeId = employeeId;
 	}
-	public String getEmployeeName() {
-		return employeeName;
+	public String getEmployeeFirstName() {
+		return employeeFirstName;
 	}
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
+	public void setEmployeeFirstName(String employeeFirstName) {
+		this.employeeFirstName = employeeFirstName;
+	}
+	public String getEmployeeLastName() {
+		return employeeLastName;
+	}
+	public void setEmployeeLastName(String employeeLastName) {
+		this.employeeLastName = employeeLastName;
 	}
 	public String getEmployeePost() {
 		return employeePost;
