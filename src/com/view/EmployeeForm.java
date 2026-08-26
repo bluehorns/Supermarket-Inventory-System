@@ -1,86 +1,94 @@
 package com.view;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+
+import java.awt.GridBagLayout;	
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import com.service.EmployeeFormService;
+
+
 
 public class EmployeeForm {
 	private JPanel formPanel;
-	private JButton backButton;
-	private JPanel backButtonPanel;
-	private JLabel firstNameLabel;
-	private JTextField firstNameTextField;
+	private JPanel addEditPanel;
+	
+	private JButton operationButton;
+	
+	private ArrayList<JTextField> textFieldList = new ArrayList<>();
 	
 	public EmployeeForm(String operation) {
-		setUpPanel();
+		setUpFormPanel();
+		switch(operation.toUpperCase()) {
+		case "ADD":
+			formPanel.add(setUpAddEditPanel());
+			operationButton = new JButton(operation);
+			formPanel.add(operationButton);
+			//EmployeeFormService.databaseButtonEvent(operationButton);
+			break;
+			
+		case "EDIT":
+			formPanel.add(setUpAddEditPanel());
+			operationButton = new JButton(operation);
+			formPanel.add(operationButton);
+			break;
+			
+		case "DELETE":
+			formPanel.add(deleteOperationTable());
+			operationButton = new JButton(operation);
+			formPanel.add(operationButton);
+			break;
+			
+		default:
+			setUpAddEditPanel();
+			break;
+		}
 	}
 	
-	private void addEmployeeForm() {
-		
-	}
-	
-	private void setUpPanel() {
+	private void setUpFormPanel() {
 		formPanel = new JPanel();
 		formPanel.setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 0.1;
-		gbc.weighty = 1;
-		formPanel.add(backButtonSetUp(),gbc);
-		
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.weightx = 0.3;
-		gbc.weighty = 0.5;
-		gbc.gridheight = 1;
-		formPanel.add(formPanel("First Name"),gbc);
-		
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.weightx = 0.3;
-		gbc.weighty = 0.5;
-		gbc.gridheight = 1;
-		formPanel.add(formPanel("Last Name"),gbc); 
-		
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		gbc.weightx = 0.3;
-		gbc.weighty = 0.5;
-		gbc.gridheight = 1;
-		formPanel.add(formPanel("Post"),gbc);	
-	}
-	
-	private void deleteEmployeeTable() {
+		//formPanel.add(backButtonSetUp());
 		
 	}
 	
-	private JButton backButtonSetUp() {
-		backButton = new JButton("Back");
-		backButton.setIcon(UserInterfaceIcons.backIconBlack());
-		return backButton;
+	private JPanel setUpAddEditPanel() {
+		addEditPanel = new JPanel();
+		addEditPanel.setLayout(new GridBagLayout());
+		
+		JLabel firstNameLabel = new JLabel("First Name");
+		addEditPanel.add(firstNameLabel,new ModifiedGridBagConstraints().setGrid(0, 0)
+				.setWeightX(0.3).setWeightY(0.5));
+		
+		JTextField firstNameTextField = new JTextField(20);
+		addEditPanel.add(firstNameTextField,new ModifiedGridBagConstraints().setGrid(0, 1)
+				.setWeightX(0.3).setWeightY(0.5)); 
+		
+
+		
+		return addEditPanel;
 	}
 	
-	public void backButtonEvent(ActionListener listener) {
-		backButton.addActionListener(listener);
+	private JScrollPane deleteOperationTable() {
+		JScrollPane tablePane = new JScrollPane();
+		HashSet<Integer> columnSet = new HashSet<>(Arrays.asList(0,1,2));
+		EmployeeTable tableForDeletingEmployee = new EmployeeTable(columnSet);
+		tablePane.setViewportView(tableForDeletingEmployee.getTable());
+		return tablePane;
 	}
 	
-	private JPanel formPanel(String formComponent) {
-		JPanel panel = new JPanel();
-		JLabel componentLabel = new JLabel(formComponent + ":");
-		panel.add(componentLabel);
-		
-		JTextField componentTextField = new JTextField(20);
-		panel.add(componentTextField);
-		
-		return panel;
-	}
+	
+	
+	
+	
 	
 	public JPanel getPanel() {
 		return formPanel;

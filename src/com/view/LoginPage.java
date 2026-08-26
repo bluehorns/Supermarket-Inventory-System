@@ -40,7 +40,7 @@ public class LoginPage {
 	
 	public LoginPage() {
 		createGui();
-		registerButton.addActionListener(e -> {
+		registerButton.addActionListener(_ -> {
 			registerPageDialog = new JDialog();
 			registerPage = new RegisterPage();
 			registerPageDialog.add(registerPage.getRegisterPage());

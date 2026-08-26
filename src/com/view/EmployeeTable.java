@@ -1,8 +1,8 @@
 package com.view;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.ArrayList;	
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JTable;
 import javax.swing.SwingWorker;
@@ -16,21 +16,27 @@ public class EmployeeTable {
 	private JTable employeeTable;
 	private DefaultTableModel tableModel;
 	private List<Employee> employeeList = new ArrayList<>();
-	private HashMap<String,Object> employeeTableMap = new HashMap<>();
+	private final int columnCount = 5;
+	
 	public EmployeeTable() {
 		intializeTable();
 		fetchTableData();
 	}
 	
-	private void setHashMap() {
-		employeeTableMap.put("S.N", null);
-		employeeTableMap.put("Employee ID", employeeList);
+	
+	public EmployeeTable(Set<Integer> columnSet) {
+		intializeTable();
+		fetchTableData();
+		deleteColumnBasedOnArray(columnSet);
 	}
 	
-	public EmployeeTable(String[] columns) {
-		employeeTable = new JTable();
-		tableModel = new DefaultTableModel(new Object[][] {},columns);
-		employeeTable.setModel(tableModel);
+	public void deleteColumnBasedOnArray(Set<Integer> columnSet) {
+		for(int i=columnCount-1;i>=0;i--) {
+			if(!columnSet.contains(i)) {
+				employeeTable.getColumnModel().removeColumn(employeeTable.getColumnModel().getColumn(i));
+				
+			}
+		}
 	}
 	
 	private void intializeTable() {
@@ -40,10 +46,6 @@ public class EmployeeTable {
 			
 		};
 		employeeTable.setModel(tableModel);
-	}
-	
-	private void createAndSetTableModel() {
-		
 	}
 	
 	private void fetchTableData() {
@@ -74,6 +76,7 @@ public class EmployeeTable {
 			i++;
 		}
 	}
+	
 	public JTable getTable() {
 		return employeeTable;
 	}
