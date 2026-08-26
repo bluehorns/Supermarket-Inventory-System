@@ -96,7 +96,7 @@ public class RegisterPage {
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				submitButton.addActionListener(e ->{
+				submitButton.addActionListener(_ ->{
 					Registration registerProcess = new Registration();
 					registerProcess.registerUserInfo(createUserInfo());
 					registerProcess.registerUserAccount(userNameTextField.getText(), 

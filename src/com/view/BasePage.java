@@ -11,7 +11,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.model.User_Info;
 
 public class BasePage {
 	JFrame BasePageFrame;
