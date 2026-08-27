@@ -1,8 +1,7 @@
 package com.view;
 
-import java.awt.GridBagConstraints;
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,7 +14,6 @@ public class EmployeePage {
 	private JPanel employeePagePanel;
 	private JScrollPane employeeTableScrollPane;
 	private EmployeeTable employeeTable;
-	private GridBagConstraints gbc;
 	private JPanel tableHeaderPanel;
 	private JPanel buttonPanel;
 	private JPanel backButtonPanel;
@@ -24,7 +22,6 @@ public class EmployeePage {
 	private JButton deleteButton;
 	private JButton backButton;
 	private JPanel operationPanel;
-	private EmployeePageService service = new EmployeePageService();
 	
 	public EmployeePage() {
 		intializePage();
@@ -41,19 +38,17 @@ public class EmployeePage {
 	
 	
 	private void setUpPage() {
-		gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.BOTH;
-		
 		tableHeaderPanel = new JPanel();
-		employeePagePanel.add(tableHeaderPanel,new ModifiedGridBagConstraints().setGrid(0, 0)
-				.setWeightX(1).setWeightY(0.3).setFill());
+		employeePagePanel.add(tableHeaderPanel,new ModifiedGridBagConstraints().setGrid(0, 0).setWeightX(1)
+				.setWeightY(0.3).setFill());
 		
 		employeeTableScrollPane = new JScrollPane();
-		employeePagePanel.add(employeeTableScrollPane,new ModifiedGridBagConstraints().setGrid(0, 1)
-				.setWeightX(1).setWeightY(0).setFill());
+		employeePagePanel.add(employeeTableScrollPane,new ModifiedGridBagConstraints().setGrid(0, 1).setWeightX(1)
+				.setWeightY(0.7).setFill());
 		
 		employeeTable = new EmployeeTable();
 		employeeTableScrollPane.setViewportView(employeeTable.getTable());
+		
 	}
 	
 	private void setUpTableHeaderPanel() {
@@ -61,7 +56,7 @@ public class EmployeePage {
 		
 		backButtonPanel = new JPanel();
 		tableHeaderPanel.add(backButtonPanel,new ModifiedGridBagConstraints().setGrid(0, 0)
-				.setWeightX(0.1).setWeightY(1));
+				.setWeightX(0.1).setWeightY(1).setFill());
 		
 		tableHeaderPanel.add(getOperationPanel(),new ModifiedGridBagConstraints().setGrid(1, 0)
 				.setWeightX(0.9).setWeightY(0.1).setFill());
@@ -71,12 +66,19 @@ public class EmployeePage {
 		backButton = new JButton("Back");
 		backButtonPanel.add(backButton);
 		backButton.setVisible(false);
+		
+//		JButton sizeButton = new JButton("Size");
+//		sizeButton.addActionListener(_->{
+//			System.out.println(employeeTableScrollPane.getSize());
+//		});
+//		backButtonPanel.add(sizeButton);
 	}
 	
 	public JPanel getOperationPanel() {
 		operationPanel = new JPanel();
+		operationPanel.setLayout(new BorderLayout());
 		buttonPanel = new JPanel();
-		operationPanel.add(buttonPanel);
+		operationPanel.add(buttonPanel,BorderLayout.CENTER);
 		
 		addButton = new JButton("Add");
 		buttonPanel.add(addButton);
@@ -85,8 +87,8 @@ public class EmployeePage {
 		buttonPanel.add(editButton);
 		
 		deleteButton = new JButton("Delete");
-		
 		buttonPanel.add(deleteButton);
+		
 		return operationPanel;
 	}
 	
