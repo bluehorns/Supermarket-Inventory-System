@@ -1,5 +1,6 @@
 package com.view;
 
+import java.awt.Dimension;
 import java.util.ArrayList;	
 import java.util.List;
 import java.util.Set;
@@ -34,7 +35,6 @@ public class EmployeeTable {
 		for(int i=columnCount-1;i>=0;i--) {
 			if(!columnSet.contains(i)) {
 				employeeTable.getColumnModel().removeColumn(employeeTable.getColumnModel().getColumn(i));
-				
 			}
 		}
 	}
@@ -46,6 +46,8 @@ public class EmployeeTable {
 			
 		};
 		employeeTable.setModel(tableModel);
+		employeeTable.setPreferredScrollableViewportSize(new Dimension(0,0));
+ 
 	}
 	
 	private void fetchTableData() {
@@ -69,7 +71,6 @@ public class EmployeeTable {
 	private void setTableData() {
 		int i = 1;
 		for(Employee employee:employeeList) {
-			int columnCount = tableModel.getColumnCount();
 			Object[] newRow = {i,employee.getEmployeeId(),employee.getEmployeeFirstName(),
 					employee.getEmployeeLastName(),employee.getEmployeePost()};
 			tableModel.addRow(newRow);

@@ -1,9 +1,8 @@
 package com.view;
 
 
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;	
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -13,50 +12,46 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import com.service.EmployeeFormService;
 
 
 
 public class EmployeeForm {
 	private JPanel formPanel;
 	private JPanel addEditPanel;
-	
 	private JButton operationButton;
-	
-	private ArrayList<JTextField> textFieldList = new ArrayList<>();
 	
 	public EmployeeForm(String operation) {
 		setUpFormPanel();
 		switch(operation.toUpperCase()) {
 		case "ADD":
-			formPanel.add(setUpAddEditPanel());
+			formPanel.add(setUpAddEditPanel(),BorderLayout.CENTER);
 			operationButton = new JButton(operation);
-			formPanel.add(operationButton);
-			//EmployeeFormService.databaseButtonEvent(operationButton);
+			formPanel.add(operationButton,BorderLayout.EAST);
 			break;
 			
 		case "EDIT":
-			formPanel.add(setUpAddEditPanel());
+			formPanel.add(setUpAddEditPanel(),BorderLayout.CENTER);
 			operationButton = new JButton(operation);
-			formPanel.add(operationButton);
+			formPanel.add(operationButton,BorderLayout.EAST);
 			break;
 			
 		case "DELETE":
-			formPanel.add(deleteOperationTable());
+			formPanel.add(deleteOperationTable(),BorderLayout.CENTER);
 			operationButton = new JButton(operation);
-			formPanel.add(operationButton);
+			formPanel.add(operationButton,BorderLayout.EAST);
 			break;
 			
 		default:
 			setUpAddEditPanel();
 			break;
 		}
+		
+		
 	}
 	
 	private void setUpFormPanel() {
 		formPanel = new JPanel();
-		formPanel.setLayout(new GridBagLayout());
-		//formPanel.add(backButtonSetUp());
+		formPanel.setLayout(new BorderLayout());
 		
 	}
 	
