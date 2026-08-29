@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
@@ -42,12 +43,25 @@ public class EmployeeTable {
 	private void intializeTable() {
 		employeeTable = new JTable();
 		tableModel = new DefaultTableModel(new Object[][] {}, new String[] {"S.N","Employee ID","First Name",
-				"Last Name","Post"}) {
-			
+				"Last Name","Post",""}) {
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				Class<?> colClass = Object.class;
+				switch(columnIndex) {
+				case 5:
+					colClass = Boolean.class;
+					break;
+				
+				default: 
+					colClass = Object.class;
+					break;
+				}
+				return colClass;
+			}
 		};
 		employeeTable.setModel(tableModel);
+		employeeTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		employeeTable.setPreferredScrollableViewportSize(new Dimension(0,0));
- 
 	}
 	
 	private void fetchTableData() {
@@ -58,7 +72,6 @@ public class EmployeeTable {
 				employeeList = dbService.fetchRecord();
 				return null;
 			}
-			
 			@Override
 			protected void done() {
 				setTableData();

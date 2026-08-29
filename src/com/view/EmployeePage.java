@@ -13,6 +13,7 @@ import com.service.EmployeePageService;
 public class EmployeePage {
 	private JPanel employeePagePanel;
 	private JScrollPane employeeTableScrollPane;
+	private EmployeeForm employeeForm;
 	private EmployeeTable employeeTable;
 	private JPanel tableHeaderPanel;
 	private JPanel buttonPanel;
@@ -22,13 +23,17 @@ public class EmployeePage {
 	private JButton deleteButton;
 	private JButton backButton;
 	private JPanel operationPanel;
+	private JButton operationButton;
+	private JPanel operationButtonPanel;
+	
 	
 	public EmployeePage() {
 		intializePage();
 		setUpPage();
 		setUpTableHeaderPanel();
-		setUpBackButtonPanel();
-		buttonEvents();
+//		setUpBackButtonPanel();
+//		setUpOperationButtonPanel();
+//		buttonEvents();
 	}
 	
 	private void intializePage() {
@@ -39,12 +44,12 @@ public class EmployeePage {
 	
 	private void setUpPage() {
 		tableHeaderPanel = new JPanel();
-		employeePagePanel.add(tableHeaderPanel,new ModifiedGridBagConstraints().setGrid(0, 0).setWeightX(1)
-				.setWeightY(0.3).setFill());
+		employeePagePanel.add(tableHeaderPanel,new GBC().setGrid(0, 0).setWeightX(1)
+				.setWeightY(0.1).setFill(GBC.BOTH));
 		
 		employeeTableScrollPane = new JScrollPane();
-		employeePagePanel.add(employeeTableScrollPane,new ModifiedGridBagConstraints().setGrid(0, 1).setWeightX(1)
-				.setWeightY(0.7).setFill());
+		employeePagePanel.add(employeeTableScrollPane,new GBC().setGrid(0, 1).setWeightX(1)
+				.setWeightY(0.9).setFill(GBC.BOTH));
 		
 		employeeTable = new EmployeeTable();
 		employeeTableScrollPane.setViewportView(employeeTable.getTable());
@@ -52,14 +57,16 @@ public class EmployeePage {
 	}
 	
 	private void setUpTableHeaderPanel() {
-		tableHeaderPanel.setLayout(new GridBagLayout());
-		
-		backButtonPanel = new JPanel();
-		tableHeaderPanel.add(backButtonPanel,new ModifiedGridBagConstraints().setGrid(0, 0)
-				.setWeightX(0.1).setWeightY(1).setFill());
-		
-		tableHeaderPanel.add(getOperationPanel(),new ModifiedGridBagConstraints().setGrid(1, 0)
-				.setWeightX(0.9).setWeightY(0.1).setFill());
+		tableHeaderPanel.setLayout(new BorderLayout());
+		tableHeaderPanel.add(new CRUDPanel());
+//		backButtonPanel = new JPanel();
+//		tableHeaderPanel.add(backButtonPanel,BorderLayout.WEST);
+//		
+//		tableHeaderPanel.add(getOperationPanel(),BorderLayout.CENTER);
+//		
+//		employeeForm = new EmployeeForm();
+//		operationButtonPanel = new JPanel();
+//		tableHeaderPanel.add(operationButtonPanel,BorderLayout.EAST);
 	}
 	
 	private void setUpBackButtonPanel() {
@@ -72,6 +79,11 @@ public class EmployeePage {
 //			System.out.println(employeeTableScrollPane.getSize());
 //		});
 //		backButtonPanel.add(sizeButton);
+	}
+	
+	private void setUpOperationButtonPanel() {
+		operationButton = new JButton("Submit");
+		operationButtonPanel.add(operationButton);
 	}
 	
 	public JPanel getOperationPanel() {
@@ -94,10 +106,11 @@ public class EmployeePage {
 	
 	
 	private void buttonEvents() {
-		EmployeePageService.operationButtonEvent(addButton, backButton, operationPanel);
-		EmployeePageService.operationButtonEvent(editButton, backButton, operationPanel);
-		EmployeePageService.operationButtonEvent(deleteButton, backButton, operationPanel);
+		EmployeePageService.selectOperationButtonEvent(employeeForm,addButton, backButton, operationPanel);
+		EmployeePageService.selectOperationButtonEvent(employeeForm,editButton, backButton, operationPanel);
+		EmployeePageService.selectOperationButtonEvent(employeeForm,deleteButton, backButton, operationPanel);
 		EmployeePageService.backButtonEvent(backButton, operationPanel, buttonPanel);
+		EmployeePageService.submitFormButtonEvent(operationButton, employeeForm);
 	}
 	
 	

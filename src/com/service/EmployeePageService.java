@@ -1,20 +1,22 @@
 package com.service;
 
 
-import java.awt.BorderLayout;
+import java.awt.BorderLayout;	
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
+import com.model.Employee;
 import com.view.EmployeeForm;
-
+	
 public class EmployeePageService {
 	
-	public static void operationButtonEvent(JButton button,JButton backButton, JPanel operationPanel) {
+	public static void selectOperationButtonEvent(EmployeeForm employeeForm,JButton button,JButton backButton, JPanel operationPanel) {
 		button.addActionListener(_ ->{
 			backButton.setVisible(true);
 			operationPanel.removeAll();
-			operationPanel.add(new EmployeeForm(button.getText()).getPanel(),BorderLayout.CENTER);
+			operationPanel.add(employeeForm.getPanel(),BorderLayout.CENTER);
 			operationPanel.revalidate();
 		});
 		//return operation;
@@ -30,5 +32,25 @@ public class EmployeePageService {
 		//return button;
 	}
 	
+	
+	public static void submitFormButtonEvent(JButton button,EmployeeForm form) {
+		button.addActionListener(_ ->{
+			SwingWorker<Void,Void> worker = new SwingWorker<>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					EmployeeDBService dbservice = new EmployeeDBService();
+					dbservice.addRecord(form.readForm());
+					return null;
+				}
+				@Override
+				protected void done() {
+					// TODO Auto-generated method stub
+					super.done();
+				}
+				
+			};
+			worker.execute();
+		});
+	}
 	
 }
