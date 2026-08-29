@@ -123,7 +123,6 @@ public class BillPage {
 					productPanel.setProductPanel(tempProduct);
 					table.getSelectionModel().clearSelection();
 				}
-				
 			}
 		});
 	}
