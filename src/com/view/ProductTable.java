@@ -10,8 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 import com.model.Product;
-import com.service.DatabaseService;
-import com.service.ProductDBService;
+import com.service.DBServiceProduct;
 
 public class ProductTable  {
 	private JTable table;
@@ -62,7 +61,7 @@ public class ProductTable  {
 			protected Void doInBackground() throws Exception {
 				tableModel.setRowCount(0);
 				
-				DatabaseService<Product> pdi = new ProductDBService();
+				DBServiceProduct pdi = new DBServiceProduct();
 				List<Product> productList = new ArrayList<>();
 				productList = pdi.fetchRecord();
 				table.getColumnModel().getColumn(0).setMaxWidth(100); //might have to rewrite this setting columnwidth to its smallest

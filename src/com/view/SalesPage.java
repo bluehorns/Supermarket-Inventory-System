@@ -15,13 +15,12 @@ import com.model.Sale_products;
 
 public class SalesPage {
 	private JPanel salePagePanel;
-	private GridBagConstraints gbc;
 	private JScrollPane saleScrollPane;
 	private SaleTable saleTable;
 	
 	private JScrollPane saleProductScrollPane;
 	private BillTable saleProductTable;
-	
+	private GridBagConstraints gbc;
 	
 	public SalesPage() {
 		intialisePanel();

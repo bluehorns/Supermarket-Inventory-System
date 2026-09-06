@@ -3,7 +3,7 @@ package com.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Sales {
+public class Sale extends DatabaseObject {
 	private int salesId;
 	private LocalDate saleDate;
 	private LocalTime saleTime;

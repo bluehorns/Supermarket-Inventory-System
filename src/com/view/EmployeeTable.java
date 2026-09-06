@@ -11,8 +11,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 import com.model.Employee;
-import com.service.DatabaseService;
-import com.service.EmployeeDBService;
+import com.service.DBServiceEmployee;
 
 public class EmployeeTable {
 	private JTable employeeTable;
@@ -68,7 +67,7 @@ public class EmployeeTable {
 		SwingWorker<Void, Void> worker = new SwingWorker<>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				DatabaseService<Employee> dbService = new EmployeeDBService();
+				DBServiceEmployee dbService = new DBServiceEmployee();
 				employeeList = dbService.fetchRecord();
 				return null;
 			}

@@ -4,22 +4,19 @@ package com.view;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 import com.model.Product;
-import com.service.DatabaseService;
-import com.service.ProductDBService;
+import com.view.form.ProductForm;
 
-import java.awt.Color;
+
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.swing.JButton;
 
@@ -30,7 +27,7 @@ public class ProductPage  {
 	private JButton deleteButton;
 	private JButton refreshButton;
 	
-	private ProductFormPanel formPanel;
+	private ProductForm formPanel;
 	
 	private JPanel tableHeaderPanel;
 	private JScrollPane tableScrollPane;
@@ -40,8 +37,6 @@ public class ProductPage  {
 	
 	public ProductPage() {
 		setPanelLayout();
-		addButtonEvent();
-		updateButtonEvent();
 		setTableScrollPane();
 		setUptableHeaderPanel();
 		rowListener();
@@ -52,7 +47,7 @@ public class ProductPage  {
 		productPagePane.setLayout(new GridBagLayout());
 		gbcProductPage = new GridBagConstraints();
 		
-		formPanel = new ProductFormPanel();
+		formPanel = new ProductForm();
 		gbcProductPage.fill = GridBagConstraints.BOTH;
 		gbcProductPage.gridx = 0;
 		gbcProductPage.gridy = 0;
@@ -69,7 +64,6 @@ public class ProductPage  {
 		gbcProductPage.weightx = 0.8;
 		gbcProductPage.weighty = 0.1;
 		productPagePane.add(tableHeaderPanel,gbcProductPage);
-		tableHeaderPanel.setBackground(Color.yellow);
 		
 		tableScrollPane = new JScrollPane();
 		gbcProductPage.gridx = 1;
@@ -87,7 +81,6 @@ public class ProductPage  {
 		
 		deleteButton = new JButton("Delete");
 		tableHeaderPanel.add(deleteButton);
-		deleteButtonEvent();
 	}
 	
 	
@@ -105,69 +98,9 @@ public class ProductPage  {
 		});
 	}
 	
-	private void addButtonEvent() {
-		JButton addButton = formPanel.getAddButton();
-		addButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DatabaseService<Product> pdi = new ProductDBService();	
-				Product formProduct = formPanel.readFormEntry();
-				SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>() {
-					@Override
-					protected Void doInBackground() throws Exception {
-						pdi.addRecord(formProduct);
-						return null;
-					}
-				};
-				worker.execute();
-
-			}
-		});
 	
-	}
 	
-	private void deleteButtonEvent() {
-		deleteButton.addActionListener(new ActionListener() {
-			List<Product> productList = new ArrayList<>();
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						DatabaseService<Product> pdi = new ProductDBService();
-						productList = productTable.getCheckBoxList();
-						for(Product prod:productList) {
-							pdi.deleteRecord(prod);
-						}
-						return null;
-					}
-				};	
-				worker.execute();	
-			}
-		});
-	}
 	
-	private void updateButtonEvent() {
-		JButton updateButton = formPanel.getUpdateButton();
-		updateButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						DatabaseService<Product> pdi = new ProductDBService();
-						Product formProduct = formPanel.readFormEntry();
-						pdi.updateRecord(formProduct);
-						return null;
-					}
-					
-					
-				};
-				worker.execute();	
-			}
-		});
-	}
 	
 	private void rowListener() {
 		JTable table = productTable.getTable();

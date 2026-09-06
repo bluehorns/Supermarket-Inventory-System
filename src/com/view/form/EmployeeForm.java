@@ -1,57 +1,47 @@
-package com.view;
+package com.view.form;
 
 
-import java.awt.BorderLayout;	
+import java.awt.BorderLayout;		
 import java.awt.GridLayout;
-import java.util.Arrays;
-import java.util.HashSet;
 
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import com.model.DatabaseObject;
 import com.model.Employee;
+import com.service.DBServiceEmployee;
+import com.service.DatabaseService;
+import com.view.Submittable;
 
-
-
-
-public class EmployeeForm {
+public class EmployeeForm extends Form  {
+	
 	private JPanel formPanel;
-	private JPanel addEditGridPanel;
+	private JPanel basePanel;
 	
 	private JLabel firstNameLabel;
-	private JTextField firstNameTextField;
 	private JLabel lastNameLabel;
-	private JTextField lastNameTextField;
 	private JLabel employeePostLabel;
+	
+	private JTextField firstNameTextField;
+	private JTextField lastNameTextField;
 	private JTextField employeePostTextField;
 	
 	public EmployeeForm() {
-		setUpFormPanel();
-		setOperationPanel();
+		setUpForm();
 	}
 	
-	public void setOperationPanel() {
-		formPanel.add(setUpAddEditGridPanel(),BorderLayout.CENTER);
-		formPanel.revalidate();
+	@Override
+	public DatabaseObject getSubmitData() {
+		return readForm();
 	}
 	
-	private void setUpFormPanel() {
+	protected void setUpForm() {
+		basePanel = new JPanel();
 		formPanel = new JPanel();
-		formPanel.setLayout(new BorderLayout());
-	}
-	
-	private JPanel setUpAddEditGridPanel() {
-		addEditGridPanel = new JPanel();
-		addEditGridPanel.add(setUpAddEditFormPanel());
-		return addEditGridPanel;
-	}
-	
-	private JPanel setUpAddEditFormPanel() {
-		JPanel formPanel = new JPanel();
 		formPanel.setLayout(new GridLayout(1,6));
+		basePanel.add(formPanel);
 		
 		firstNameLabel = new JLabel("First Name");
 		formPanel.add(firstNameLabel);
@@ -70,10 +60,10 @@ public class EmployeeForm {
 		
 		employeePostTextField = new JTextField(20);
 		formPanel.add(employeePostTextField); 
-		
-		return formPanel;
 	};
 	
+	
+	@Override
 	public Employee readForm() {
 		Employee tempEmployee = new Employee();
 		tempEmployee.setEmployeeFirstName(firstNameTextField.getText());
@@ -82,7 +72,20 @@ public class EmployeeForm {
 		return tempEmployee;
 	}
 	
+	@Override
+	public void fillForm(DatabaseObject object) {
+		
+		
+	}
+	
+	@Override
 	public JPanel getPanel() {
-		return formPanel;
+		return basePanel;
+	}
+	
+	
+	@Override
+	public DatabaseService getService() {
+		return new DBServiceEmployee();
 	}
 }

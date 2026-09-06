@@ -7,8 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import com.model.Employee;
-import com.view.EmployeeForm;
+import com.view.form.EmployeeForm;
 	
 public class EmployeePageService {
 	
@@ -38,8 +37,8 @@ public class EmployeePageService {
 			SwingWorker<Void,Void> worker = new SwingWorker<>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					EmployeeDBService dbservice = new EmployeeDBService();
-					dbservice.addRecord(form.readForm());
+					DBServiceEmployee dbservice = new DBServiceEmployee();
+					//dbservice.addRecord(form.readForm());
 					return null;
 				}
 				@Override

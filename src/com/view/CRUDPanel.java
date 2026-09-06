@@ -1,12 +1,14 @@
 package com.view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagLayout;
-
-import javax.swing.BoxLayout;
+import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import com.service.DBServiceEmployee;
+import com.view.form.EmployeeForm;
+import com.view.form.Form;
+
 
 public class CRUDPanel extends JPanel {
 	/**
@@ -14,49 +16,56 @@ public class CRUDPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = -8277782146694660721L;
 	private JPanel basePanel;
-	private JPanel submitButtonPanel;
-	private JPanel backButtonPanel;
 	private JPanel buttonCRUDPanel;
-	private JPanel operationPanel;
+	private JPanel backButtonPanel;
+	private JPanel formPanel;
 	
-	private JButton backButton;
 	private JButton addButton;
 	private JButton editButton;
 	private JButton deleteButton;
-	private JButton submitButton;
+	
+	private BackButton backButton;
+	private ButtonSubmitAbstract submitButton;
 	
 	public CRUDPanel() {
 		intializePanel();
-		basePanel();
-		buttonEvents();
+		setBasePanel();
+		colourTest();
+	}
+	
+	private void colourTest() {
+		buttonCRUDPanel.setBackground(Color.magenta);
 	}
 	
 	private void intializePanel() {
 		this.setLayout(new BorderLayout());
 		basePanel = new JPanel();
-		basePanel.setLayout(new BoxLayout(basePanel,BoxLayout.LINE_AXIS));
+		basePanel.setLayout(new BorderLayout());
 		this.add(basePanel,BorderLayout.CENTER);
 	}
 	
-	private void basePanel() {
-		basePanel.add(setUpBackButtonPanel());
-		
-		basePanel.add(setUpCRUDButtonPanel());
-		
-		basePanel.add(setUpSubmitButtonPanel());
+
+	private void setBasePanel() {
+		backButton =  new BackButton();
+		backButtonPanel = new JPanel();
+		backButtonPanel.add(backButton);
+		basePanel.add(backButtonPanel,BorderLayout.WEST);
+		basePanel.add(setUpCRUDButtonPanel(),BorderLayout.CENTER);
 	}
 	
-	private JPanel setUpBackButtonPanel() {
-		backButtonPanel = new JPanel();
-		backButton = new JButton("Back");
-		backButtonPanel.add(backButton);
-		//backButtonPanel.setVisible(false);
-		backButton.setVisible(false);
-		return backButtonPanel;
-	}
+	private JPanel setFormPanel(JPanel form, JButton button) {
+		formPanel = new JPanel();
+		formPanel.setLayout(new BorderLayout());
+		
+		formPanel.add(form,BorderLayout.CENTER);
+		formPanel.add(button,BorderLayout.EAST);
+		
+		return formPanel;
+		}
 	
 	private JPanel setUpCRUDButtonPanel() {
 		buttonCRUDPanel = new JPanel();
+		
 		addButton = new JButton("Add");
 		buttonCRUDPanel.add(addButton);
 		
@@ -69,23 +78,29 @@ public class CRUDPanel extends JPanel {
 		return buttonCRUDPanel;
 	}
 	
-	private JPanel setUpSubmitButtonPanel() {
-		submitButtonPanel = new JPanel();
-		submitButton = new JButton("Submit");
-		submitButtonPanel.add(submitButton);
-		return submitButtonPanel;
+	
+	public void addButtonEvent(Form form) {
+		addButton.addActionListener(_-> {
+			submitButton = new ButtonAdd().buttonEvent(form.getService(), form);
+			System.out.println(submitButton);
+			basePanel.remove(buttonCRUDPanel);
+			basePanel.add(setFormPanel(form.getPanel(),submitButton));
+			backButton.backButtonEvent(buttonCRUDPanel, formPanel);
+			this.revalidate();
+			this.repaint();
+		});
 	}
 	
-	private void toggleButtonVisibility(Component component) {
-		if(component.isVisible()){
-			component.setVisible(false);
-		} else {
-			component.setVisible(true);
-		}
-		return;
-	}
+//	public void editButtonPanel(JPanel newPanel) {
+//		
+//		editButton.addActionListener(_->{
+//			basePanel.remove(buttonCRUDPanel);
+//			basePanel.add(testPanel);
+//			backButton.backButtonEvent(buttonCRUDPanel, formPanel);
+//			this.revalidate();
+//			this.repaint();
+//		});
+//	}
 	
-	private void buttonEvents() {
-		addButton.addActionListener(_-> toggleButtonVisibility(backButton));
-	}
+	
 }
