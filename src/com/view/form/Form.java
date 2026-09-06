@@ -1,12 +1,16 @@
 package com.view.form;
 
-import com.model.DatabaseObject;
+import javax.swing.JPanel;
 
-public abstract class Form {
-	
-	
+import com.model.DatabaseObject;
+import com.service.DatabaseService;
+import com.view.Submittable;
+
+public abstract class Form implements Submittable {
 	protected abstract void setUpForm();
 	public abstract DatabaseObject readForm();
 	public abstract void fillForm(DatabaseObject object);
-	
+	public abstract JPanel getPanel();
+	public abstract DatabaseService getService();
+	public abstract DatabaseObject getSubmitData();
 }

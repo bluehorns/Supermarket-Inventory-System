@@ -6,24 +6,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.model.DatabaseObject;
 import com.model.Employee;
 
-public class DBServiceEmployee implements DatabaseService<Employee> {
+public class DBServiceEmployee implements DatabaseService {
 	private List<Employee> employeeList = new ArrayList<>();
 	private DatabaseConnection dbCon = new DatabaseConnection();
+	private Employee tempEmployee;
 	
 	@Override
-	public void addRecord(Employee record) {
-		record = (Employee) record;
+	public void addRecord(DatabaseObject record) {
+		tempEmployee = (Employee) record;
 		String sql = "Insert into employees(employee_firstname,employee_lastname,employee_post,user_id) "
 				+ "VALUES(?,?,?,?)";
 		try {
 			dbCon.createConnection();
 			PreparedStatement stm = dbCon.getConnection().prepareStatement(sql);
-			stm.setString(1, record.getEmployeeFirstName());
-			stm.setString(2, record.getEmployeeLastName());
-			stm.setString(3, record.getEmployeePost());
-			stm.setInt(4, record.getUserID());
+			stm.setString(1, tempEmployee.getEmployeeFirstName());
+			stm.setString(2, tempEmployee.getEmployeeLastName());
+			stm.setString(3, tempEmployee.getEmployeePost());
+			stm.setInt(4, tempEmployee.getUserID());
 			stm.executeUpdate();
 			dbCon.closeConnection();
 		} catch (SQLException e) {
@@ -36,7 +38,6 @@ public class DBServiceEmployee implements DatabaseService<Employee> {
 	@Override
 	public List<Employee> fetchRecord() {
 		String sql = "Select * from employees";
-		
 		try {
 			dbCon.createConnection();
 			PreparedStatement stm = dbCon.getConnection().prepareStatement(sql);
@@ -52,8 +53,9 @@ public class DBServiceEmployee implements DatabaseService<Employee> {
 	
 	
 	private void processResultSet(ResultSet rs) throws SQLException {
+		Employee employee;
 		while(rs.next()) {
-			Employee employee = new Employee();
+			employee = new Employee();
 			employee.setEmployeeId(rs.getInt("employee_id"));
 			employee.setEmployeeFirstName(rs.getString("employee_firstname"));
 			employee.setEmployeePost(rs.getString("employee_post"));
@@ -63,13 +65,13 @@ public class DBServiceEmployee implements DatabaseService<Employee> {
 	}
 	
 	@Override
-	public void deleteRecord(Employee type) {
+	public void deleteRecord(DatabaseObject record) {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
-	public void updateRecord(Employee type) {
+	public void updateRecord(DatabaseObject record) {
 		// TODO Auto-generated method stub
 		
 	}

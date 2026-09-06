@@ -49,7 +49,7 @@ public class EmployeePage {
 		tableHeaderPanel.setLayout(new BorderLayout());
 		crudPanel = new CRUDPanel();
 		employeeForm = new EmployeeForm();
-		crudPanel.addButtonPanel(employeeForm.getPanel());
+		crudPanel.addButtonEvent(employeeForm);
 		tableHeaderPanel.add(crudPanel);
 	}
 	

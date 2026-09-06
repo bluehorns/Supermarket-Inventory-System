@@ -7,7 +7,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-import com.model.Employee;
 import com.view.form.EmployeeForm;
 	
 public class EmployeePageService {

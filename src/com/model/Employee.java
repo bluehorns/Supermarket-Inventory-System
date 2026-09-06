@@ -38,8 +38,4 @@ public class Employee extends DatabaseObject {
 		this.userID = userID;
 	} 
 	
-	@Override
-	protected Employee getObject() {
-		return this;
-	}
 }

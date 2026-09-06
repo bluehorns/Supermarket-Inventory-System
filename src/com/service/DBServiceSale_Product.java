@@ -6,27 +6,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.model.DatabaseObject;
 import com.model.Product;
 import com.model.Sale_products;
 
-public class DBServiceSale_Product implements DatabaseService<Sale_products> {
+public class DBServiceSale_Product implements DatabaseService {
 	private DatabaseConnection dbCon = new DatabaseConnection();
 	List<Sale_products> saleProductList = new ArrayList<Sale_products>();
 	
 	@Override
-	public void addRecord(Sale_products record) {
+	public void addRecord(DatabaseObject record) {
+		Sale_products tempSaleProduct = (Sale_products) record;
 		String sql = "Insert into sale_products(sale_id,product_id,saleproduct_name,saleproduct_company"
 				+ ",saleproduct_price,saleproduct_quantity) values(?,?,?,?,?,?)";
 		
 		try {
 			dbCon.createConnection();
 			PreparedStatement stm = dbCon.getConnection().prepareStatement(sql);
-			stm.setInt(1, record.getSaleId());
-			stm.setInt(2, record.getSaleProduct().getId());
-			stm.setString(3, record.getSaleProduct().getName());
-			stm.setString(4, record.getSaleProduct().getCompany());
-			stm.setInt(5, record.getSaleProduct().getPrice());
-			stm.setInt(6, record.getSaleProduct().getQuantity());
+			stm.setInt(1, tempSaleProduct.getSaleId());
+			stm.setInt(2, tempSaleProduct.getSaleProduct().getId());
+			stm.setString(3, tempSaleProduct.getSaleProduct().getName());
+			stm.setString(4, tempSaleProduct.getSaleProduct().getCompany());
+			stm.setInt(5, tempSaleProduct.getSaleProduct().getPrice());
+			stm.setInt(6, tempSaleProduct.getSaleProduct().getQuantity());
 			stm.executeUpdate();
 			dbCon.closeConnection();
 		} catch (SQLException e) {
@@ -35,7 +37,7 @@ public class DBServiceSale_Product implements DatabaseService<Sale_products> {
 	}
 	
 	@Override
-	public void deleteRecord(Sale_products type) {
+	public void deleteRecord(DatabaseObject record) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -76,7 +78,7 @@ public class DBServiceSale_Product implements DatabaseService<Sale_products> {
 	
 	
 	@Override
-	public void updateRecord(Sale_products type) {
+	public void updateRecord(DatabaseObject type) {
 		// TODO Auto-generated method stub
 		
 	}

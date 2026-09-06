@@ -1,7 +1,7 @@
 package com.view.form;
 
 
-import java.awt.BorderLayout;	
+import java.awt.BorderLayout;		
 import java.awt.GridLayout;
 
 
@@ -11,13 +11,14 @@ import javax.swing.JTextField;
 
 import com.model.DatabaseObject;
 import com.model.Employee;
-import com.service.ReadForm;
+import com.service.DBServiceEmployee;
+import com.service.DatabaseService;
 import com.view.Submittable;
 
-public class EmployeeForm extends Form implements Submittable {
+public class EmployeeForm extends Form  {
 	
 	private JPanel formPanel;
-	private JPanel addEditGridPanel;
+	private JPanel basePanel;
 	
 	private JLabel firstNameLabel;
 	private JLabel lastNameLabel;
@@ -36,15 +37,11 @@ public class EmployeeForm extends Form implements Submittable {
 		return readForm();
 	}
 	
-//	private JPanel setUpAddEditGridPanel() {
-//		addEditGridPanel = new JPanel();
-//		addEditGridPanel.add(setUpAddEditFormPanel());
-//		return addEditGridPanel;
-//	}
-//	
 	protected void setUpForm() {
-		JPanel formPanel = new JPanel();
+		basePanel = new JPanel();
+		formPanel = new JPanel();
 		formPanel.setLayout(new GridLayout(1,6));
+		basePanel.add(formPanel);
 		
 		firstNameLabel = new JLabel("First Name");
 		formPanel.add(firstNameLabel);
@@ -63,12 +60,11 @@ public class EmployeeForm extends Form implements Submittable {
 		
 		employeePostTextField = new JTextField(20);
 		formPanel.add(employeePostTextField); 
-		
 	};
 	
 	
 	@Override
-	public DatabaseObject readForm() {
+	public Employee readForm() {
 		Employee tempEmployee = new Employee();
 		tempEmployee.setEmployeeFirstName(firstNameTextField.getText());
 		tempEmployee.setEmployeeLastName(lastNameTextField.getText());
@@ -82,7 +78,14 @@ public class EmployeeForm extends Form implements Submittable {
 		
 	}
 	
+	@Override
 	public JPanel getPanel() {
-		return formPanel;
+		return basePanel;
+	}
+	
+	
+	@Override
+	public DatabaseService getService() {
+		return new DBServiceEmployee();
 	}
 }

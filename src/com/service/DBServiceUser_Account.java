@@ -4,23 +4,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import com.model.DatabaseObject;
 import com.model.User_Account;
 
-public class DBServiceUser_Account implements DatabaseService<User_Account> {
+public class DBServiceUser_Account implements DatabaseService {
 	private DatabaseConnection dbCon = new DatabaseConnection();
 	
 	@Override
-	public void addRecord(User_Account record)  {
+	public void addRecord(DatabaseObject record)  {
+		User_Account tempaccount = (User_Account) record;
 		String sql = "Insert into user_account(user_name,user_id,password_hash,password_salt) values(?,?,?,?)";
-		User_Account tempAccount = new User_Account();
 		PreparedStatement stm;
 		try {
 			dbCon.createConnection();
 			stm = dbCon.getConnection().prepareStatement(sql);
-			stm.setString(1, record.getUsername());
-			stm.setInt(2, record.getUserid());
-			stm.setBytes(3, record.getPasswordHash());
-			stm.setBytes(4, record.getSalt());
+			stm.setString(1, tempaccount.getUsername());
+			stm.setInt(2, tempaccount.getUserid());
+			stm.setBytes(3, tempaccount.getPasswordHash());
+			stm.setBytes(4, tempaccount.getSalt());
 			stm.execute();
 			dbCon.closeConnection();
 		} catch (SQLException e) {
@@ -30,7 +32,7 @@ public class DBServiceUser_Account implements DatabaseService<User_Account> {
 	}
 	
 	@Override
-	public void deleteRecord(User_Account type) {
+	public void deleteRecord(DatabaseObject record) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -59,7 +61,7 @@ public class DBServiceUser_Account implements DatabaseService<User_Account> {
 	}
 	
 	@Override
-	public void updateRecord(User_Account type) {
+	public void updateRecord(DatabaseObject record) {
 		// TODO Auto-generated method stub
 		
 	}

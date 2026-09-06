@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.service.DBServiceEmployee;
+import com.view.form.EmployeeForm;
+import com.view.form.Form;
 
 
 public class CRUDPanel extends JPanel {
@@ -51,7 +53,7 @@ public class CRUDPanel extends JPanel {
 		basePanel.add(setUpCRUDButtonPanel(),BorderLayout.CENTER);
 	}
 	
-	private JPanel setFormPanel(JPanel form, ButtonSubmitAbstract button) {
+	private JPanel setFormPanel(JPanel form, JButton button) {
 		formPanel = new JPanel();
 		formPanel.setLayout(new BorderLayout());
 		
@@ -77,11 +79,12 @@ public class CRUDPanel extends JPanel {
 	}
 	
 	
-	public void addButtonPanel() {
-		submitButton = new ButtonAdd().buttonEvent(new DBServiceEmployee());
+	public void addButtonEvent(Form form) {
 		addButton.addActionListener(_-> {
+			submitButton = new ButtonAdd().buttonEvent(form.getService(), form);
+			System.out.println(submitButton);
 			basePanel.remove(buttonCRUDPanel);
-			basePanel.add(setFormPanel(newPanel,submitButton));
+			basePanel.add(setFormPanel(form.getPanel(),submitButton));
 			backButton.backButtonEvent(buttonCRUDPanel, formPanel);
 			this.revalidate();
 			this.repaint();

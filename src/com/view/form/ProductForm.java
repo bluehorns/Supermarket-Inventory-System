@@ -1,10 +1,7 @@
 package com.view.form;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -16,8 +13,6 @@ import com.model.Product;
 public class ProductForm extends Form {
 	private JPanel productFormPanel;
 	private JPanel formPanel;
-	private JButton addButton;
-	private JButton updateButton;
 	
 	private JLabel productIdLabel;
 	private JTextField productIdTextField;
@@ -30,7 +25,6 @@ public class ProductForm extends Form {
 	private JLabel productCompanyLabel;
 	private JTextField productCompanyTextField;
 	
-	private GridBagConstraints gbc;
 	
 	public ProductForm() {
 		setUpForm();
@@ -168,9 +162,9 @@ public class ProductForm extends Form {
 		
 	}
 	
-	
+	@Override
 	public JPanel getPanel() {
-		return productFormPanel;
+		return formPanel;
 	}
 	
 }

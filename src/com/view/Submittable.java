@@ -2,7 +2,7 @@ package com.view;
 
 import com.model.DatabaseObject;
 
-public interface Submittable<T> {
+public interface Submittable {
 	
-	public T getSubmitData();
+	public DatabaseObject getSubmitData();
 }
