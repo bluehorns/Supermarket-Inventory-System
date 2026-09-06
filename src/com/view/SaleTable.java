@@ -8,15 +8,15 @@ import javax.swing.JTable;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import com.service.Sale_ProductDBService;
-import com.service.SalesDBService;
+import com.service.DBServiceSale_Product;
+import com.service.DBServiceSale;
 import com.model.Sale_products;
-import com.model.Sales;
+import com.model.Sale;
 
 public class SaleTable  {
 	private JTable salesTable;
 	private DefaultTableModel tableModel;
-	private List<Sales> saleList = new ArrayList<>();
+	private List<Sale> saleList = new ArrayList<>();
 	private List<Sale_products> saleProductList  = new ArrayList<>();
 	
 	public SaleTable() {
@@ -41,7 +41,7 @@ public class SaleTable  {
 	
 	private void setTableData() {
 		tableModel.setRowCount(0);
-		for(Sales sale:saleList) {
+		for(Sale sale:saleList) {
 			Object[] objectArray = {sale.getSalesId(),sale.getSaleDate(),sale.getSaleTime(),sale.getEmployeeId()};
 			tableModel.addRow(objectArray);
 		}
@@ -51,9 +51,9 @@ public class SaleTable  {
 		SwingWorker<Void,Void> worker = new SwingWorker<Void,Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				SalesDBService saleDB = new SalesDBService();
+				DBServiceSale saleDB = new DBServiceSale();
 				saleList = saleDB.fetchRecord();
-				Sale_ProductDBService saleProductDB = new Sale_ProductDBService();
+				DBServiceSale_Product saleProductDB = new DBServiceSale_Product();
 				saleProductList = saleProductDB.fetchRecord();
 				return null;
 			}

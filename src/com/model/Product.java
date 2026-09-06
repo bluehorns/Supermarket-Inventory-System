@@ -1,6 +1,6 @@
 package com.model;
 
-public class Product {
+public class Product extends DatabaseObject {
 	private int id;
 	private String name;
 	private int price;

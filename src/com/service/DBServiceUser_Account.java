@@ -1,36 +1,32 @@
 package com.service;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
+	
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
 import com.model.User_Account;
 
-public class User_AccountDBService implements DatabaseService<User_Account> {
-	private Connection con;
+public class DBServiceUser_Account implements DatabaseService<User_Account> {
+	private DatabaseConnection dbCon = new DatabaseConnection();
 	
 	@Override
 	public void addRecord(User_Account record)  {
-		connectToDB();
 		String sql = "Insert into user_account(user_name,user_id,password_hash,password_salt) values(?,?,?,?)";
 		User_Account tempAccount = new User_Account();
 		PreparedStatement stm;
 		try {
-			stm = con.prepareStatement(sql);
+			dbCon.createConnection();
+			stm = dbCon.getConnection().prepareStatement(sql);
 			stm.setString(1, record.getUsername());
 			stm.setInt(2, record.getUserid());
 			stm.setBytes(3, record.getPasswordHash());
 			stm.setBytes(4, record.getSalt());
 			stm.execute();
+			dbCon.closeConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		closeDB();
 	}
 	
 	@Override
@@ -46,19 +42,19 @@ public class User_AccountDBService implements DatabaseService<User_Account> {
 	}
 	
 	public User_Account fetchRecord(String username) {
-		connectToDB();
 		String sql = "Select * from user_account where user_name = ?";
 		User_Account tempAccount = new User_Account();
 		try {
-			PreparedStatement stm = con.prepareStatement(sql);
+			dbCon.createConnection();
+			PreparedStatement stm = dbCon.getConnection().prepareStatement(sql);
 			stm.setString(1, username);
 			ResultSet rs = stm.executeQuery();
 			tempAccount = parseResultSet(rs);
+			dbCon.closeConnection();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		closeDB();
 		return tempAccount;
 	}
 	
@@ -84,27 +80,4 @@ public class User_AccountDBService implements DatabaseService<User_Account> {
 		return tempAccount;
 	}
 	
-	@Override
-	public void connectToDB() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Inventory","root","1234");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	@Override
-	public void closeDB() {
-		try {
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
 }

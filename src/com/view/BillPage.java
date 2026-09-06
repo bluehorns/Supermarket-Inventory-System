@@ -18,9 +18,9 @@ import javax.swing.event.ListSelectionListener;
 
 import com.model.Product;
 import com.model.Sale_products;
-import com.model.Sales;
-import com.service.Sale_ProductDBService;
-import com.service.SalesDBService;
+import com.model.Sale;
+import com.service.DBServiceSale_Product;
+import com.service.DBServiceSale;
 
 public class BillPage {
 	private JPanel billPagePanel;
@@ -142,13 +142,13 @@ public class BillPage {
 				SwingWorker<Void, Void> worker = new SwingWorker<>() {
 					@Override
 					protected Void doInBackground() throws Exception {
-						SalesDBService salesDB = new SalesDBService();
+						DBServiceSale salesDB = new DBServiceSale();
 						List<Product> billProductList = billTable.getProductList();
-						Sales record = new Sales();
+						Sale record = new Sale();
 						record.generateSale();
 						salesDB.addRecord(record);
 						int saleId = salesDB.getGeneratedID();
-						Sale_ProductDBService saleProductDB = new Sale_ProductDBService();
+						DBServiceSale_Product saleProductDB = new DBServiceSale_Product();
 						for(Product prod:billProductList) {
 							Sale_products saleProductRecord = new Sale_products();
 							saleProductRecord.setSaleId(saleId);

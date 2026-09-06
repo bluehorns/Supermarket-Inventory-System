@@ -1,6 +1,6 @@
 package com.model;
 
-public class User_Account {
+public class User_Account extends DatabaseObject {
 	private String username;
 	private int userid;
 	private byte[] passwordHash;

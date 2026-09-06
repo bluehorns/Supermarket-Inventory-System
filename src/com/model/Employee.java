@@ -1,6 +1,6 @@
 package com.model;
 
-public class Employee {
+public class Employee extends DatabaseObject {
 	private int employeeId;
 	private String employeeFirstName;
 	private String employeeLastName;
@@ -37,4 +37,9 @@ public class Employee {
 	public void setUserID(int userID) {
 		this.userID = userID;
 	} 
+	
+	@Override
+	protected Employee getObject() {
+		return this;
+	}
 }

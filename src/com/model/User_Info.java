@@ -1,6 +1,6 @@
 package com.model;
 
-public class User_Info {
+public class User_Info extends DatabaseObject{
 	private int userID;
 	private String userFirstName;
 	private String userLastName;

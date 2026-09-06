@@ -118,8 +118,6 @@ public class LoginPage {
 					@Override
 					protected void done() {
 						if(loginCheck) {
-							//UserDBService dbService = new UserDBService();
-							//userInfo = dbService.
 							BasePage page = new BasePage(usernameTextField.getText());
 							SwingUtilities.getWindowAncestor(loginButton).dispose();
 						}

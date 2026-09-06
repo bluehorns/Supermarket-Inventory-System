@@ -15,14 +15,14 @@ public class Registration {
 //	}
 	
 	public void registerUserInfo(User_Info info) {
-		UserDBService infoDB = new UserDBService();
+		DBServiceUser_Info infoDB = new DBServiceUser_Info();
 		infoDB.addRecord(info);
 		userId = infoDB.getUserId();
 	}
 	
 	public void registerUserAccount(String username,char[] password) {
 		User_Account account = new User_Account();
-		User_AccountDBService accountDB = new User_AccountDBService();
+		DBServiceUser_Account accountDB = new DBServiceUser_Account();
 		PasswordEncryption encrypt = new PasswordEncryption();
 		account.setUsername(username);
 		account.setUserid(userId);
